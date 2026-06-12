@@ -1,0 +1,39 @@
+"use client";
+import { useApp } from "../../context/AppContext";
+import { WITHDRAW_CATEGORIES } from "@/lib/constants";
+import { GuestNotice } from "../ui/GuestNotice";
+import { WithdrawCategoryList } from "../withdraw/WithdrawCategoryList";
+import { RobuxPanel } from "../withdraw/RobuxPanel";
+import { StockPanel } from "../withdraw/StockPanel";
+
+export function WithdrawPage() {
+  const {
+    loggedIn, openLoginModal, withdrawCategory, setWithdrawCategory,
+    tokens, setTokens, userId, username, displayName, avatarUrl,
+    robuxRequests, setRobuxRequests, tasks, tasksCompleted, affiliateCode, saveSession, setBuyModal,
+    sessionToken,
+  } = useApp();
+
+  const currentWithdrawCat = WITHDRAW_CATEGORIES.find(c => c.id === withdrawCategory);
+
+  return (
+    <div style={{ paddingTop: 40 }}>
+      <div className="page-title">Withdraw</div>
+      <p className="page-sub">Choose a reward category</p>
+      {!loggedIn && <GuestNotice page="Withdraw" onSignIn={openLoginModal} />}
+      {!withdrawCategory && <WithdrawCategoryList loggedIn={loggedIn} onSelect={setWithdrawCategory} />}
+      {withdrawCategory === "robux" && (
+        <RobuxPanel
+          tokens={tokens} setTokens={setTokens} userId={userId} username={username}
+          displayName={displayName} avatarUrl={avatarUrl} robuxRequests={robuxRequests}
+          setRobuxRequests={setRobuxRequests} tasks={tasks} tasksCompleted={tasksCompleted}
+          affiliateCode={affiliateCode} saveSession={saveSession} onBack={() => setWithdrawCategory(null)}
+          sessionToken={sessionToken}
+        />
+      )}
+      {withdrawCategory && withdrawCategory !== "robux" && currentWithdrawCat && (
+        <StockPanel cat={currentWithdrawCat} tokens={tokens} avatarUrl={avatarUrl} displayName={displayName} username={username} setBuyModal={setBuyModal} onBack={() => setWithdrawCategory(null)} />
+      )}
+    </div>
+  );
+}

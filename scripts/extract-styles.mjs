@@ -1,0 +1,13 @@
+import fs from "fs";
+const p = new URL("../app/page.js", import.meta.url);
+const s = fs.readFileSync(p, "utf8");
+const start = s.indexOf("const styles = `") + "const styles = `".length;
+const endMarker = "`;\r\n\r\n// ─── WITHDRAW CATEGORIES";
+const end = s.indexOf(endMarker);
+const end2 = s.indexOf("`;\n\n// ─── WITHDRAW CATEGORIES");
+const endIdx = end >= 0 ? end : end2;
+if (endIdx < 0) throw new Error("end not found");
+if (start < 0) throw new Error("start not found");
+const css = s.slice(start, endIdx);
+fs.writeFileSync(new URL("../app/cheapgg.css", import.meta.url), css);
+console.log("ok", css.length);
