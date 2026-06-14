@@ -423,13 +423,6 @@ function CPXWidget({ userId, username }) {
       .banner-scene {
         z-index: unset !important;
       }
-
-      /* Header ve sidebar popup'ın arkasında kalsın */
-      .header,
-      .chat-sidebar,
-      .chat-sidebar-wrapper {
-        z-index: 1 !important;
-      }
     `;
     document.head.appendChild(styleOverride);
 
