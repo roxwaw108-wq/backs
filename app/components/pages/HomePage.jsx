@@ -398,6 +398,27 @@ function CPXWidget({ userId, username }) {
         color: #00ce98 !important;
       }
 
+      /* Anket bulunamadı metni */
+      #cpx-fullscreen [class*="no-survey"],
+      #cpx-fullscreen [class*="nosurvey"],
+      #cpx-fullscreen [class*="empty"],
+      #cpx-fullscreen [class*="not-found"],
+      #cpx-fullscreen [class*="no_survey"] {
+        color: #00ce98 !important;
+        font-size: 18px !important;
+        font-weight: 700 !important;
+      }
+
+      /* Genel — beyaz arkaplanda beyaz/açık metin kalmasın */
+      #cpx-fullscreen p,
+      #cpx-fullscreen span,
+      #cpx-fullscreen div,
+      #cpx-fullscreen h1,
+      #cpx-fullscreen h2,
+      #cpx-fullscreen h3 {
+        color: #1a1a2e;
+      }
+
       /* Welcome banner stacking context'ini sıfırla — popup arkada kalmasın */
       .welcome-banner,
       .banner-content,
