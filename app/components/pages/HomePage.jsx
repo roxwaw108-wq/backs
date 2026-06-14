@@ -393,10 +393,8 @@ function CPXWidget({ userId, username }) {
         font-weight: 700 !important;
       }
 
-      /* Ok ve linkler */
-      #cpx-fullscreen [class*="arrow"],
-      #cpx-fullscreen [class*="btn"],
-      #cpx-fullscreen a {
+      /* Ok ve linkler — buton olan anchor'ları hariç tut */
+      #cpx-fullscreen [class*="arrow"] {
         color: #00ce98 !important;
       }
 
