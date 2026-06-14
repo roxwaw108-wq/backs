@@ -409,11 +409,12 @@ function CPXWidget({ userId, username }) {
         font-weight: 700 !important;
       }
 
-      /* Başlık metinleri */
+      /* Başlık ve paragraf metinleri — buton içindekiler hariç */
       #cpx-fullscreen h1,
       #cpx-fullscreen h2,
       #cpx-fullscreen h3,
-      #cpx-fullscreen h4 {
+      #cpx-fullscreen h4,
+      #cpx-fullscreen p:not(a p):not(button p) {
         color: #1a1a2e !important;
       }
 
