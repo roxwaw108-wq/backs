@@ -409,14 +409,12 @@ function CPXWidget({ userId, username }) {
         font-weight: 700 !important;
       }
 
-      /* Genel — beyaz arkaplanda beyaz/açık metin kalmasın */
-      #cpx-fullscreen p,
-      #cpx-fullscreen span,
-      #cpx-fullscreen div,
+      /* Başlık metinleri */
       #cpx-fullscreen h1,
       #cpx-fullscreen h2,
-      #cpx-fullscreen h3 {
-        color: #1a1a2e;
+      #cpx-fullscreen h3,
+      #cpx-fullscreen h4 {
+        color: #1a1a2e !important;
       }
 
       /* Welcome banner stacking context'ini sıfırla — popup arkada kalmasın */
