@@ -279,6 +279,82 @@ function SocialsTaskRow({ loggedIn, userId, onClaim, openLoginModal }) {
   );
 }
 
+// ─── CPXWidget ────────────────────────────────────────────────────────────────
+// Script Tag entegrasyonu — iFrame yerine CPX'in kendi JS widget'ı kullanılıyor.
+// Her activeOffer="cpx" açılışında script DOM'a eklenir, kapanışında temizlenir.
+function CPXWidget({ userId, username }) {
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    if (!userId) return;
+
+    const secureHash = md5(String(userId) + "-" + CPX_SECRET);
+
+    // Config script
+    const configScript = document.createElement("script");
+    configScript.id = "cpx-config-script";
+    configScript.innerHTML = `
+      var cpx_script1 = {
+        div_id: "cpx-fullscreen",
+        theme_style: 1,
+        order_by: 2,
+        limit_surveys: 12
+      };
+      window.config = {
+        general_config: {
+          app_id: 33253,
+          ext_user_id: "${userId}",
+          username: "${username || ""}",
+          email: "",
+          secure_hash: "${secureHash}",
+          subid_1: "",
+          subid_2: ""
+        },
+        style_config: {
+          text_color: "#ffffff",
+          survey_box: {
+            topbar_background_color: "#00ce98",
+            box_background_color: "#090913",
+            rounded_borders: true,
+            stars_filled: "#f5a623"
+          }
+        },
+        script_config: [cpx_script1],
+        debug: false
+      };
+    `;
+
+    // Library script
+    const libScript = document.createElement("script");
+    libScript.id = "cpx-lib-script";
+    libScript.src = "https://cdn.cpx-research.com/assets/js/script_tag_v2.0.js";
+    libScript.async = true;
+
+    document.body.appendChild(configScript);
+    document.body.appendChild(libScript);
+
+    return () => {
+      // Temizle — Go Back'e basınca script'leri kaldır
+      document.getElementById("cpx-config-script")?.remove();
+      document.getElementById("cpx-lib-script")?.remove();
+      // CPX'in kendi oluşturduğu elementleri de temizle
+      document.getElementById("cpx-fullscreen-wrapper")?.remove();
+    };
+  }, [userId, username]);
+
+  return (
+    <div
+      ref={containerRef}
+      style={{ width: "100%", minHeight: "72vh" }}
+    >
+      <div
+        id="cpx-fullscreen"
+        style={{ maxWidth: "950px", margin: "0 auto" }}
+      />
+    </div>
+  );
+}
+
 // ─── HomePage ─────────────────────────────────────────────────────────────────
 export function HomePage() {
   const {
@@ -497,7 +573,6 @@ export function HomePage() {
                       borderRadius: 14, display: "flex", flexDirection: "column",
                       alignItems: "center", padding: "36px 24px", gap: 28, textAlign: "center",
                     }}>
-                      {/* Uyarı kutusu */}
                       <div style={{
                         background: "rgba(76,187,110,0.08)", border: "1.5px solid rgba(76,187,110,0.30)",
                         borderRadius: 14, padding: "20px 28px", maxWidth: 500, width: "100%",
@@ -519,8 +594,6 @@ export function HomePage() {
                           <span style={{ color: "#fff", fontWeight: 800 }}>won't appear here.</span>
                         </div>
                       </div>
-
-                      {/* Open TimeWall butonu */}
                       <a
                         href={`https://timewall.io/users/login?oid=${TIMEWALL_OID}&uid=${userId}`}
                         target="_blank"
@@ -538,8 +611,6 @@ export function HomePage() {
                       >
                         Open TimeWall →
                       </a>
-
-                      {/* Redeem görseli */}
                       <img
                         src="/timewallpopup.webp"
                         alt="How to redeem on TimeWall"
@@ -553,25 +624,26 @@ export function HomePage() {
                   ) : (
                     <div style={{
                       background: "#090913", border: "1px solid var(--border-gold)",
-                      borderRadius: 14, overflow: "hidden", height: "72vh", minHeight: 480,
+                      borderRadius: 14, overflow: "hidden", minHeight: 480,
                     }}>
+                      {/* ── CPX Research — Script Tag ── */}
                       {activeOffer === "cpx" && (
-                        <iframe
-                          style={{ width: "100%", height: "100%", border: 0 }}
-                          title="CPX Research"
-                          src={"https://offers.cpx-research.com/index.php?app_id=33253&ext_user_id=" + userId + "&secure_hash=" + md5(String(userId) + "-" + CPX_SECRET) + "&username=" + username + "&email=&subid_1=&subid_2="}
-                        />
+                        <CPXWidget userId={userId} username={username} />
                       )}
+
+                      {/* ── Bitlabs — iFrame ── */}
                       {activeOffer === "bitlabs" && (
                         <iframe
-                          style={{ width: "100%", height: "100%", border: 0 }}
+                          style={{ width: "100%", height: "72vh", minHeight: 480, border: 0 }}
                           title="Bitlabs"
                           src={"https://web.bitlabs.ai/?uid=" + userId + "&token=" + BITLABS_APP_TOKEN}
                         />
                       )}
+
+                      {/* ── TheoremReach — iFrame ── */}
                       {activeOffer === "tr" && trUrl && (
                         <iframe
-                          style={{ width: "100%", height: "100%", border: 0 }}
+                          style={{ width: "100%", height: "72vh", minHeight: 480, border: 0 }}
                           title="TheoremReach"
                           src={trUrl}
                         />
