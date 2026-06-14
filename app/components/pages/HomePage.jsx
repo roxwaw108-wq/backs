@@ -338,6 +338,23 @@ function CPXWidget({ userId, username }) {
     document.body.appendChild(configScript);
     document.body.appendChild(libScript);
 
+    // MutationObserver — CPX popup DOM'a girince ortala
+    const observer = new MutationObserver(() => {
+      const popups = document.querySelectorAll(
+        'body > [class*="cpx"], body > [id*="cpx"], body > [class*="survey"], body > [class*="modal"], body > [class*="overlay"]'
+      );
+      popups.forEach(el => {
+        if (el.id === "cpx-fullscreen" || el.id === "cpx-widget-shell") return;
+        el.style.position = "fixed";
+        el.style.top = "50%";
+        el.style.left = "50%";
+        el.style.transform = "translate(-50%, -50%)";
+        el.style.margin = "0";
+        el.style.zIndex = "999999";
+      });
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+
     // Style overrides
     const styleOverride = document.createElement("style");
     styleOverride.id = "cpx-style-override";
@@ -382,25 +399,11 @@ function CPXWidget({ userId, username }) {
       #cpx-fullscreen a {
         color: #00ce98 !important;
       }
-
-      /* ── Popup / screener'ı widget içinde tut ──
-         CPX fixed popup'ını container'a hapsetmek için:
-         body'e gelen fixed elementleri gizle, sadece
-         #cpx-widget-shell içindekiler görünsün.         */
-      body > [class*="cpx"][class*="overlay"],
-      body > [class*="cpx"][class*="modal"],
-      body > [class*="cpx"][class*="popup"],
-      body > [class*="cpx"][class*="screener"] {
-        position: absolute !important;
-        top: 0 !important;
-        left: 0 !important;
-        width: 100% !important;
-        height: 100% !important;
-      }
     `;
     document.head.appendChild(styleOverride);
 
     return () => {
+      observer.disconnect();
       document.getElementById("cpx-config-script")?.remove();
       document.getElementById("cpx-lib-script")?.remove();
       document.getElementById("cpx-style-override")?.remove();
