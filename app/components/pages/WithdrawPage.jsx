@@ -20,34 +20,6 @@ export function WithdrawPage() {
       <div className="page-title">Withdraw</div>
       <p className="page-sub">Choose a reward category</p>
 
-      {!loggedIn && (
-        <div style={{
-          marginBottom: 24,
-          padding: "14px 18px",
-          background: "rgba(245,166,35,0.08)",
-          border: "1px solid rgba(245,166,35,0.30)",
-          borderRadius: 12,
-          fontFamily: "'Fredoka', sans-serif",
-          fontSize: 14,
-          fontWeight: 600,
-          color: "var(--text2)",
-          display: "flex",
-          alignItems: "center",
-          gap: 10,
-        }}>
-          <span style={{ fontSize: 18 }}>🔒</span>
-          <span>
-            <span
-              onClick={openLoginModal}
-              style={{ color: "var(--cheap)", fontWeight: 800, cursor: "pointer", textDecoration: "underline" }}
-            >
-              Sign in
-            </span>
-            {" "}to withdraw your tokens for real rewards.
-          </span>
-        </div>
-      )}
-
       {!withdrawCategory && (
         <WithdrawCategoryList
           loggedIn={loggedIn}

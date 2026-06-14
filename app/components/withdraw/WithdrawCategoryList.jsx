@@ -3,8 +3,6 @@ import Image from "next/image";
 import { WITHDRAW_CATEGORIES } from "@/lib/constants";
 
 export function WithdrawCategoryList({ loggedIn, onSelect }) {
-  if (!loggedIn) return null;
-
   return (
     <div className="offers-grid">
       {WITHDRAW_CATEGORIES.map(cat => (
@@ -26,10 +24,7 @@ export function WithdrawCategoryList({ loggedIn, onSelect }) {
             alt={cat.label ?? cat.id}
             fill
             sizes="(max-width: 768px) 50vw, 25vw"
-            style={{
-              objectFit: "cover",
-              objectPosition: "center",
-            }}
+            style={{ objectFit: "cover", objectPosition: "center" }}
           />
           <div style={{
             position: "absolute",
