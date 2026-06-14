@@ -288,12 +288,12 @@ function CPXWidget({ userId, username }) {
 
     const secureHash = md5(String(userId) + "-" + CPX_SECRET);
 
-    // Inter font'u yükle (sadece CPX widget için)
-    const fontLink = document.createElement("link");
-    fontLink.id = "cpx-inter-font";
-    fontLink.rel = "stylesheet";
-    fontLink.href = "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap";
+    // Inter font
     if (!document.getElementById("cpx-inter-font")) {
+      const fontLink = document.createElement("link");
+      fontLink.id = "cpx-inter-font";
+      fontLink.rel = "stylesheet";
+      fontLink.href = "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap";
       document.head.appendChild(fontLink);
     }
 
@@ -322,7 +322,7 @@ function CPXWidget({ userId, username }) {
             topbar_background_color: "#00ce98",
             box_background_color: "#ffffff",
             rounded_borders: true,
-            stars_filled: "#f5a623"
+            stars_filled: "#FFD700"
           }
         },
         script_config: [cpx_script1],
@@ -338,31 +338,64 @@ function CPXWidget({ userId, username }) {
     document.body.appendChild(configScript);
     document.body.appendChild(libScript);
 
-    // CPX widget içindeki font'u override et
+    // Style overrides
     const styleOverride = document.createElement("style");
     styleOverride.id = "cpx-style-override";
     styleOverride.innerHTML = `
+      /* Font */
       #cpx-fullscreen * {
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
       }
-      #cpx-fullscreen .cpx-topbar,
-      #cpx-fullscreen [class*="topbar"] {
+
+      /* Topbar */
+      #cpx-fullscreen [class*="topbar"],
+      #cpx-fullscreen [class*="header"] {
         background-color: #00ce98 !important;
-        font-family: 'Inter', sans-serif !important;
       }
+
+      /* Yıldızlar — SVG fill + color her ikisi de */
+      #cpx-fullscreen [class*="star"] svg,
+      #cpx-fullscreen [class*="star"] svg *,
+      #cpx-fullscreen [class*="rating"] svg,
+      #cpx-fullscreen [class*="rating"] svg * {
+        fill: #FFD700 !important;
+        color: #FFD700 !important;
+        stroke: none !important;
+      }
+      #cpx-fullscreen [class*="star"],
+      #cpx-fullscreen [class*="rating"] {
+        color: #FFD700 !important;
+      }
+
+      /* Ödül / miktar rengi */
       #cpx-fullscreen [class*="reward"],
       #cpx-fullscreen [class*="amount"],
-      #cpx-fullscreen [class*="price"] {
+      #cpx-fullscreen [class*="price"],
+      #cpx-fullscreen [class*="earn"] {
         color: #00ce98 !important;
         font-weight: 700 !important;
       }
-      #cpx-fullscreen [class*="star"] {
-        color: #f5a623 !important;
-      }
+
+      /* Ok ve linkler */
       #cpx-fullscreen [class*="arrow"],
       #cpx-fullscreen [class*="btn"],
       #cpx-fullscreen a {
         color: #00ce98 !important;
+      }
+
+      /* ── Popup / screener'ı widget içinde tut ──
+         CPX fixed popup'ını container'a hapsetmek için:
+         body'e gelen fixed elementleri gizle, sadece
+         #cpx-widget-shell içindekiler görünsün.         */
+      body > [class*="cpx"][class*="overlay"],
+      body > [class*="cpx"][class*="modal"],
+      body > [class*="cpx"][class*="popup"],
+      body > [class*="cpx"][class*="screener"] {
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
       }
     `;
     document.head.appendChild(styleOverride);
@@ -376,7 +409,13 @@ function CPXWidget({ userId, username }) {
   }, [userId, username]);
 
   return (
+    /*
+      position: relative + isolation: isolate → yeni stacking context oluşturur.
+      CPX'in fixed popup'u idealde buraya göre konumlanır;
+      tam çalışmazsa en azından z-index karışmaz.
+    */
     <div
+      id="cpx-widget-shell"
       ref={containerRef}
       style={{
         width: "100%",
@@ -384,6 +423,8 @@ function CPXWidget({ userId, username }) {
         background: "#f4f6fb",
         borderRadius: 14,
         overflow: "hidden",
+        position: "relative",
+        isolation: "isolate",
       }}
     >
       <div
