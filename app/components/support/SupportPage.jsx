@@ -59,8 +59,8 @@ export function SupportPage({ loggedIn, openModal, supportReason, setSupportReas
         const lastMsg = (conv.messages || [])[conv.messages.length - 1];
         return (
           <div key={conv._id} className="card" style={{ marginBottom: 12, padding: "14px 16px" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-              <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "nowrap" }}>
+              <div style={{ flex: 1, minWidth: 0, overflow: "hidden" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4, flexWrap: "wrap" }}>
                   <div style={{ fontFamily: "'Fredoka', sans-serif", fontWeight: 800, fontSize: 14, color: "var(--text)" }}>{conv.reason}</div>
                   <span style={{ fontSize: 11, fontWeight: 800, padding: "2px 8px", borderRadius: 6, fontFamily: "'Fredoka', sans-serif", background: badge.bg, color: badge.color, border: `1px solid ${badge.border}` }}>{badge.label}</span>
@@ -68,7 +68,7 @@ export function SupportPage({ loggedIn, openModal, supportReason, setSupportReas
                 </div>
                 <div style={{ fontSize: 13, color: "var(--text2)", fontWeight: 500, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{lastMsg?.text || conv.desc}</div>
               </div>
-              <button type="button" onClick={() => openSupportChat(conv)} className="btn-amber conv-chat-btn" style={{ width: "auto", flexShrink: 0, padding: "8px 20px", fontSize: 13 }}>Chat</button>
+              <button type="button" onClick={() => openSupportChat(conv)} className="btn-amber conv-chat-btn" style={{ width: "auto", minWidth: 60, flexShrink: 0, padding: "8px 16px", fontSize: 13, alignSelf: "center" }}>Chat</button>
             </div>
           </div>
         );
