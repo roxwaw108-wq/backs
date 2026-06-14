@@ -350,7 +350,7 @@ function CPXWidget({ userId, username }) {
         el.style.left = "50%";
         el.style.transform = "translate(-50%, -50%)";
         el.style.margin = "0";
-        el.style.zIndex = "999999";
+        el.style.zIndex = "2147483647";
       });
     });
     observer.observe(document.body, { childList: true, subtree: true });
@@ -398,6 +398,13 @@ function CPXWidget({ userId, username }) {
       #cpx-fullscreen [class*="btn"],
       #cpx-fullscreen a {
         color: #00ce98 !important;
+      }
+
+      /* Welcome banner stacking context'ini sıfırla — popup arkada kalmasın */
+      .welcome-banner,
+      .banner-content,
+      .banner-scene {
+        z-index: unset !important;
       }
     `;
     document.head.appendChild(styleOverride);
