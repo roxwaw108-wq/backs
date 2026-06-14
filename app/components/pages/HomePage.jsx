@@ -623,7 +623,7 @@ export function HomePage() {
                     </div>
                   ) : (
                     <div style={{
-                      background: "#090913", border: "1px solid var(--border-gold)",
+                      background: "#ffffff", border: "1px solid var(--border-gold)",
                       borderRadius: 14, overflow: "hidden", minHeight: 480,
                     }}>
                       {/* ── CPX Research — Script Tag ── */}
