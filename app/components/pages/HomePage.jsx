@@ -280,8 +280,6 @@ function SocialsTaskRow({ loggedIn, userId, onClaim, openLoginModal }) {
 }
 
 // ─── CPXWidget ────────────────────────────────────────────────────────────────
-// Script Tag entegrasyonu — iFrame yerine CPX'in kendi JS widget'ı kullanılıyor.
-// Her activeOffer="cpx" açılışında script DOM'a eklenir, kapanışında temizlenir.
 function CPXWidget({ userId, username }) {
   const containerRef = useRef(null);
 
@@ -290,7 +288,15 @@ function CPXWidget({ userId, username }) {
 
     const secureHash = md5(String(userId) + "-" + CPX_SECRET);
 
-    // Config script
+    // Inter font'u yükle (sadece CPX widget için)
+    const fontLink = document.createElement("link");
+    fontLink.id = "cpx-inter-font";
+    fontLink.rel = "stylesheet";
+    fontLink.href = "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap";
+    if (!document.getElementById("cpx-inter-font")) {
+      document.head.appendChild(fontLink);
+    }
+
     const configScript = document.createElement("script");
     configScript.id = "cpx-config-script";
     configScript.innerHTML = `
@@ -311,10 +317,10 @@ function CPXWidget({ userId, username }) {
           subid_2: ""
         },
         style_config: {
-          text_color: "#ffffff",
+          text_color: "#1a1a2e",
           survey_box: {
             topbar_background_color: "#00ce98",
-            box_background_color: "#090913",
+            box_background_color: "#ffffff",
             rounded_borders: true,
             stars_filled: "#f5a623"
           }
@@ -324,7 +330,6 @@ function CPXWidget({ userId, username }) {
       };
     `;
 
-    // Library script
     const libScript = document.createElement("script");
     libScript.id = "cpx-lib-script";
     libScript.src = "https://cdn.cpx-research.com/assets/js/script_tag_v2.0.js";
@@ -333,11 +338,39 @@ function CPXWidget({ userId, username }) {
     document.body.appendChild(configScript);
     document.body.appendChild(libScript);
 
+    // CPX widget içindeki font'u override et
+    const styleOverride = document.createElement("style");
+    styleOverride.id = "cpx-style-override";
+    styleOverride.innerHTML = `
+      #cpx-fullscreen * {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+      }
+      #cpx-fullscreen .cpx-topbar,
+      #cpx-fullscreen [class*="topbar"] {
+        background-color: #00ce98 !important;
+        font-family: 'Inter', sans-serif !important;
+      }
+      #cpx-fullscreen [class*="reward"],
+      #cpx-fullscreen [class*="amount"],
+      #cpx-fullscreen [class*="price"] {
+        color: #00ce98 !important;
+        font-weight: 700 !important;
+      }
+      #cpx-fullscreen [class*="star"] {
+        color: #f5a623 !important;
+      }
+      #cpx-fullscreen [class*="arrow"],
+      #cpx-fullscreen [class*="btn"],
+      #cpx-fullscreen a {
+        color: #00ce98 !important;
+      }
+    `;
+    document.head.appendChild(styleOverride);
+
     return () => {
-      // Temizle — Go Back'e basınca script'leri kaldır
       document.getElementById("cpx-config-script")?.remove();
       document.getElementById("cpx-lib-script")?.remove();
-      // CPX'in kendi oluşturduğu elementleri de temizle
+      document.getElementById("cpx-style-override")?.remove();
       document.getElementById("cpx-fullscreen-wrapper")?.remove();
     };
   }, [userId, username]);
@@ -345,7 +378,13 @@ function CPXWidget({ userId, username }) {
   return (
     <div
       ref={containerRef}
-      style={{ width: "100%", minHeight: "72vh" }}
+      style={{
+        width: "100%",
+        minHeight: "72vh",
+        background: "#f4f6fb",
+        borderRadius: 14,
+        overflow: "hidden",
+      }}
     >
       <div
         id="cpx-fullscreen"
@@ -623,7 +662,6 @@ export function HomePage() {
                     </div>
                   ) : (
                     <div style={{
-                      background: "#ffffff", border: "1px solid var(--border-gold)",
                       borderRadius: 14, overflow: "hidden", minHeight: 480,
                     }}>
                       {/* ── CPX Research — Script Tag ── */}
