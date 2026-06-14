@@ -280,6 +280,8 @@ function SocialsTaskRow({ loggedIn, userId, onClaim, openLoginModal }) {
 }
 
 // ─── CPXWidget ────────────────────────────────────────────────────────────────
+// Script Tag entegrasyonu — iFrame yerine CPX'in kendi JS widget'ı kullanılıyor.
+// Her activeOffer="cpx" açılışında script DOM'a eklenir, kapanışında temizlenir.
 function CPXWidget({ userId, username }) {
   const containerRef = useRef(null);
 
@@ -288,15 +290,7 @@ function CPXWidget({ userId, username }) {
 
     const secureHash = md5(String(userId) + "-" + CPX_SECRET);
 
-    // Inter font
-    if (!document.getElementById("cpx-inter-font")) {
-      const fontLink = document.createElement("link");
-      fontLink.id = "cpx-inter-font";
-      fontLink.rel = "stylesheet";
-      fontLink.href = "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap";
-      document.head.appendChild(fontLink);
-    }
-
+    // Config script
     const configScript = document.createElement("script");
     configScript.id = "cpx-config-script";
     configScript.innerHTML = `
@@ -317,12 +311,12 @@ function CPXWidget({ userId, username }) {
           subid_2: ""
         },
         style_config: {
-          text_color: "#1a1a2e",
+          text_color: "#ffffff",
           survey_box: {
             topbar_background_color: "#00ce98",
-            box_background_color: "#ffffff",
+            box_background_color: "#090913",
             rounded_borders: true,
-            stars_filled: "#FFD700"
+            stars_filled: "#f5a623"
           }
         },
         script_config: [cpx_script1],
@@ -330,6 +324,7 @@ function CPXWidget({ userId, username }) {
       };
     `;
 
+    // Library script
     const libScript = document.createElement("script");
     libScript.id = "cpx-lib-script";
     libScript.src = "https://cdn.cpx-research.com/assets/js/script_tag_v2.0.js";
@@ -338,97 +333,19 @@ function CPXWidget({ userId, username }) {
     document.body.appendChild(configScript);
     document.body.appendChild(libScript);
 
-    // MutationObserver — CPX popup DOM'a girince ortala
-    const observer = new MutationObserver(() => {
-      const popups = document.querySelectorAll(
-        'body > [class*="cpx"], body > [id*="cpx"], body > [class*="survey"], body > [class*="modal"], body > [class*="overlay"]'
-      );
-      popups.forEach(el => {
-        if (el.id === "cpx-fullscreen" || el.id === "cpx-widget-shell") return;
-        el.style.position = "fixed";
-        el.style.top = "50%";
-        el.style.left = "50%";
-        el.style.transform = "translate(-50%, -50%)";
-        el.style.margin = "0";
-        el.style.zIndex = "999999";
-      });
-    });
-    observer.observe(document.body, { childList: true, subtree: true });
-
-    // Style overrides
-    const styleOverride = document.createElement("style");
-    styleOverride.id = "cpx-style-override";
-    styleOverride.innerHTML = `
-      /* Font */
-      #cpx-fullscreen * {
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
-      }
-
-      /* Topbar */
-      #cpx-fullscreen [class*="topbar"],
-      #cpx-fullscreen [class*="header"] {
-        background-color: #00ce98 !important;
-      }
-
-      /* Yıldızlar — SVG fill + color her ikisi de */
-      #cpx-fullscreen [class*="star"] svg,
-      #cpx-fullscreen [class*="star"] svg *,
-      #cpx-fullscreen [class*="rating"] svg,
-      #cpx-fullscreen [class*="rating"] svg * {
-        fill: #FFD700 !important;
-        color: #FFD700 !important;
-        stroke: none !important;
-      }
-      #cpx-fullscreen [class*="star"],
-      #cpx-fullscreen [class*="rating"] {
-        color: #FFD700 !important;
-      }
-
-      /* Ödül / miktar rengi */
-      #cpx-fullscreen [class*="reward"],
-      #cpx-fullscreen [class*="amount"],
-      #cpx-fullscreen [class*="price"],
-      #cpx-fullscreen [class*="earn"] {
-        color: #00ce98 !important;
-        font-weight: 700 !important;
-      }
-
-      /* Ok ve linkler */
-      #cpx-fullscreen [class*="arrow"],
-      #cpx-fullscreen [class*="btn"],
-      #cpx-fullscreen a {
-        color: #00ce98 !important;
-      }
-    `;
-    document.head.appendChild(styleOverride);
-
     return () => {
-      observer.disconnect();
+      // Temizle — Go Back'e basınca script'leri kaldır
       document.getElementById("cpx-config-script")?.remove();
       document.getElementById("cpx-lib-script")?.remove();
-      document.getElementById("cpx-style-override")?.remove();
+      // CPX'in kendi oluşturduğu elementleri de temizle
       document.getElementById("cpx-fullscreen-wrapper")?.remove();
     };
   }, [userId, username]);
 
   return (
-    /*
-      position: relative + isolation: isolate → yeni stacking context oluşturur.
-      CPX'in fixed popup'u idealde buraya göre konumlanır;
-      tam çalışmazsa en azından z-index karışmaz.
-    */
     <div
-      id="cpx-widget-shell"
       ref={containerRef}
-      style={{
-        width: "100%",
-        minHeight: "72vh",
-        background: "#f4f6fb",
-        borderRadius: 14,
-        overflow: "hidden",
-        position: "relative",
-        isolation: "isolate",
-      }}
+      style={{ width: "100%", minHeight: "72vh" }}
     >
       <div
         id="cpx-fullscreen"
@@ -706,6 +623,7 @@ export function HomePage() {
                     </div>
                   ) : (
                     <div style={{
+                      background: "#090913", border: "1px solid var(--border-gold)",
                       borderRadius: 14, overflow: "hidden", minHeight: 480,
                     }}>
                       {/* ── CPX Research — Script Tag ── */}
