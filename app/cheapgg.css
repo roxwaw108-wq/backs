@@ -1065,6 +1065,13 @@ input, textarea, select, button { min-width: 0; }
     border-radius: 12px !important;
   }
 
+  .conv-chat-btn,
+  .claim-card-chat-btn {
+    width: auto !important;
+    flex-shrink: 0 !important;
+    align-self: center !important;
+  }
+
   .live-earns-bar { display: none !important; }
 
   .offer-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
