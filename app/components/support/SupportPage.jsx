@@ -68,7 +68,7 @@ export function SupportPage({ loggedIn, openModal, supportReason, setSupportReas
                 </div>
                 <div style={{ fontSize: 13, color: "var(--text2)", fontWeight: 500, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{lastMsg?.text || conv.desc}</div>
               </div>
-              <button type="button" onClick={() => openSupportChat(conv)} className="btn-amber conv-chat-btn">Chat</button>
+              <button type="button" onClick={() => openSupportChat(conv)} className="btn-amber conv-chat-btn" style={{ width: "auto", flexShrink: 0, padding: "8px 20px", fontSize: 13 }}>Chat</button>
             </div>
           </div>
         );
