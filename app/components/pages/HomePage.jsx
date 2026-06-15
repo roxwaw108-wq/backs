@@ -282,9 +282,12 @@ function SocialsTaskRow({ loggedIn, userId, onClaim, openLoginModal }) {
 // ─── CPXWidget ────────────────────────────────────────────────────────────────
 function CPXWidget({ userId, username }) {
   const containerRef = useRef(null);
+  const [noSurveys, setNoSurveys] = useState(false);
 
   useEffect(() => {
     if (!userId) return;
+
+    setNoSurveys(false);
 
     const secureHash = md5(String(userId) + "-" + CPX_SECRET);
 
@@ -326,9 +329,28 @@ function CPXWidget({ userId, username }) {
           }
         },
         script_config: [cpx_script1],
-        debug: false
+        debug: false,
+        functions: {
+          no_surveys_available: function() {
+            if (window.__cpxNoSurveysCallback) {
+              window.__cpxNoSurveysCallback();
+            }
+          },
+          count_new_surveys: function(count) {
+            if (window.__cpxSurveyCountCallback) {
+              window.__cpxSurveyCountCallback(count);
+            }
+          }
+        }
       };
     `;
+
+    // React state'i script içinden tetiklemek için global callback
+    window.__cpxNoSurveysCallback = () => setNoSurveys(true);
+    window.__cpxSurveyCountCallback = (count) => {
+      if (count === 0) setNoSurveys(true);
+      else setNoSurveys(false);
+    };
 
     const libScript = document.createElement("script");
     libScript.id = "cpx-lib-script";
@@ -370,7 +392,7 @@ function CPXWidget({ userId, username }) {
         background-color: #00ce98 !important;
       }
 
-      /* Yıldızlar — SVG fill + color her ikisi de */
+      /* Yıldızlar */
       #cpx-fullscreen [class*="star"] svg,
       #cpx-fullscreen [class*="star"] svg *,
       #cpx-fullscreen [class*="rating"] svg,
@@ -393,20 +415,9 @@ function CPXWidget({ userId, username }) {
         font-weight: 700 !important;
       }
 
-      /* Ok ve linkler — buton olan anchor'ları hariç tut */
+      /* Ok */
       #cpx-fullscreen [class*="arrow"] {
         color: #00ce98 !important;
-      }
-
-      /* Anket bulunamadı metni */
-      #cpx-fullscreen [class*="no-survey"],
-      #cpx-fullscreen [class*="nosurvey"],
-      #cpx-fullscreen [class*="empty"],
-      #cpx-fullscreen [class*="not-found"],
-      #cpx-fullscreen [class*="no_survey"] {
-        color: #00ce98 !important;
-        font-size: 18px !important;
-        font-weight: 700 !important;
       }
 
       /* Başlık metinleri */
@@ -417,7 +428,7 @@ function CPXWidget({ userId, username }) {
         color: #1a1a2e !important;
       }
 
-      /* Welcome banner stacking context'ini sıfırla — popup arkada kalmasın */
+      /* Welcome banner stacking context'ini sıfırla */
       .welcome-banner,
       .banner-content,
       .banner-scene {
@@ -435,6 +446,8 @@ function CPXWidget({ userId, username }) {
 
     return () => {
       observer.disconnect();
+      delete window.__cpxNoSurveysCallback;
+      delete window.__cpxSurveyCountCallback;
       document.getElementById("cpx-config-script")?.remove();
       document.getElementById("cpx-lib-script")?.remove();
       document.getElementById("cpx-style-override")?.remove();
@@ -443,24 +456,45 @@ function CPXWidget({ userId, username }) {
   }, [userId, username]);
 
   return (
-    /*
-      position: relative + isolation: isolate → yeni stacking context oluşturur.
-      CPX'in fixed popup'u idealde buraya göre konumlanır;
-      tam çalışmazsa en azından z-index karışmaz.
-    */
     <div
       id="cpx-widget-shell"
       ref={containerRef}
       style={{
         width: "100%",
         minHeight: "72vh",
-        background: "#f4f6fb",
+        background: "#ffffff",
         borderRadius: 14,
         overflow: "hidden",
         position: "relative",
         isolation: "isolate",
       }}
     >
+      {/* CPX'in no_surveys_available callback'i tetiklenince biz kendi UI'ımızı gösteriyoruz */}
+      {noSurveys && (
+        <div style={{
+          position: "absolute", inset: 0, zIndex: 10,
+          display: "flex", flexDirection: "column",
+          alignItems: "center", justifyContent: "center",
+          gap: 16, textAlign: "center",
+          background: "#ffffff",
+          padding: "40px 24px",
+        }}>
+          <div style={{ fontSize: 52 }}>😔</div>
+          <div style={{
+            fontFamily: "'Fredoka', sans-serif", fontSize: 22,
+            fontWeight: 900, color: "#1a1a2e",
+          }}>
+            No surveys available
+          </div>
+          <div style={{
+            fontFamily: "'Fredoka', sans-serif", fontSize: 14,
+            fontWeight: 500, color: "#555", maxWidth: 320, lineHeight: 1.7,
+          }}>
+            There are no surveys available for you right now. Please check back later — new surveys are added regularly!
+          </div>
+        </div>
+      )}
+
       <div
         id="cpx-fullscreen"
         style={{ maxWidth: "950px", margin: "0 auto" }}
@@ -736,15 +770,10 @@ export function HomePage() {
                       />
                     </div>
                   ) : (
-                    <div style={{
-                      borderRadius: 14, overflow: "hidden", minHeight: 480,
-                    }}>
-                      {/* ── CPX Research — Script Tag ── */}
+                    <div style={{ borderRadius: 14, overflow: "hidden", minHeight: 480 }}>
                       {activeOffer === "cpx" && (
                         <CPXWidget userId={userId} username={username} />
                       )}
-
-                      {/* ── Bitlabs — iFrame ── */}
                       {activeOffer === "bitlabs" && (
                         <iframe
                           style={{ width: "100%", height: "72vh", minHeight: 480, border: 0 }}
@@ -752,8 +781,6 @@ export function HomePage() {
                           src={"https://web.bitlabs.ai/?uid=" + userId + "&token=" + BITLABS_APP_TOKEN}
                         />
                       )}
-
-                      {/* ── TheoremReach — iFrame ── */}
                       {activeOffer === "tr" && trUrl && (
                         <iframe
                           style={{ width: "100%", height: "72vh", minHeight: 480, border: 0 }}
