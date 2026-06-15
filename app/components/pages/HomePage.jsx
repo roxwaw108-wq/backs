@@ -282,12 +282,9 @@ function SocialsTaskRow({ loggedIn, userId, onClaim, openLoginModal }) {
 // ─── CPXWidget ────────────────────────────────────────────────────────────────
 function CPXWidget({ userId, username }) {
   const containerRef = useRef(null);
-  const [noSurveys, setNoSurveys] = useState(false);
 
   useEffect(() => {
     if (!userId) return;
-
-    setNoSurveys(false);
 
     const secureHash = md5(String(userId) + "-" + CPX_SECRET);
 
@@ -329,28 +326,9 @@ function CPXWidget({ userId, username }) {
           }
         },
         script_config: [cpx_script1],
-        debug: false,
-        functions: {
-          no_surveys_available: function() {
-            if (window.__cpxNoSurveysCallback) {
-              window.__cpxNoSurveysCallback();
-            }
-          },
-          count_new_surveys: function(count) {
-            if (window.__cpxSurveyCountCallback) {
-              window.__cpxSurveyCountCallback(count);
-            }
-          }
-        }
+        debug: false
       };
     `;
-
-    // React state'i script içinden tetiklemek için global callback
-    window.__cpxNoSurveysCallback = () => setNoSurveys(true);
-    window.__cpxSurveyCountCallback = (count) => {
-      if (count === 0) setNoSurveys(true);
-      else setNoSurveys(false);
-    };
 
     const libScript = document.createElement("script");
     libScript.id = "cpx-lib-script";
@@ -446,8 +424,6 @@ function CPXWidget({ userId, username }) {
 
     return () => {
       observer.disconnect();
-      delete window.__cpxNoSurveysCallback;
-      delete window.__cpxSurveyCountCallback;
       document.getElementById("cpx-config-script")?.remove();
       document.getElementById("cpx-lib-script")?.remove();
       document.getElementById("cpx-style-override")?.remove();
@@ -469,32 +445,6 @@ function CPXWidget({ userId, username }) {
         isolation: "isolate",
       }}
     >
-      {/* CPX'in no_surveys_available callback'i tetiklenince biz kendi UI'ımızı gösteriyoruz */}
-      {noSurveys && (
-        <div style={{
-          position: "absolute", inset: 0, zIndex: 10,
-          display: "flex", flexDirection: "column",
-          alignItems: "center", justifyContent: "center",
-          gap: 16, textAlign: "center",
-          background: "#ffffff",
-          padding: "40px 24px",
-        }}>
-          <div style={{ fontSize: 52 }}>😔</div>
-          <div style={{
-            fontFamily: "'Fredoka', sans-serif", fontSize: 22,
-            fontWeight: 900, color: "#1a1a2e",
-          }}>
-            No surveys available
-          </div>
-          <div style={{
-            fontFamily: "'Fredoka', sans-serif", fontSize: 14,
-            fontWeight: 500, color: "#555", maxWidth: 320, lineHeight: 1.7,
-          }}>
-            There are no surveys available for you right now. Please check back later — new surveys are added regularly!
-          </div>
-        </div>
-      )}
-
       <div
         id="cpx-fullscreen"
         style={{ maxWidth: "950px", margin: "0 auto" }}
