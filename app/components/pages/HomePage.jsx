@@ -279,6 +279,196 @@ function SocialsTaskRow({ loggedIn, userId, onClaim, openLoginModal }) {
   );
 }
 
+// ─── CPXWidget ────────────────────────────────────────────────────────────────
+function CPXWidget({ userId, username }) {
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    if (!userId) return;
+
+    const secureHash = md5(String(userId) + "-" + CPX_SECRET);
+
+    // Inter font
+    if (!document.getElementById("cpx-inter-font")) {
+      const fontLink = document.createElement("link");
+      fontLink.id = "cpx-inter-font";
+      fontLink.rel = "stylesheet";
+      fontLink.href = "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap";
+      document.head.appendChild(fontLink);
+    }
+
+    const configScript = document.createElement("script");
+    configScript.id = "cpx-config-script";
+    configScript.innerHTML = `
+      var cpx_script1 = {
+        div_id: "cpx-fullscreen",
+        theme_style: 1,
+        order_by: 2,
+        limit_surveys: 12
+      };
+      window.config = {
+        general_config: {
+          app_id: 33253,
+          ext_user_id: "${userId}",
+          username: "${username || ""}",
+          email: "",
+          secure_hash: "${secureHash}",
+          subid_1: "",
+          subid_2: ""
+        },
+        style_config: {
+          text_color: "#1a1a2e",
+          survey_box: {
+            topbar_background_color: "#00ce98",
+            box_background_color: "#ffffff",
+            rounded_borders: true,
+            stars_filled: "#FFD700"
+          }
+        },
+        script_config: [cpx_script1],
+        debug: false
+      };
+    `;
+
+    const libScript = document.createElement("script");
+    libScript.id = "cpx-lib-script";
+    libScript.src = "https://cdn.cpx-research.com/assets/js/script_tag_v2.0.js";
+    libScript.async = true;
+
+    document.body.appendChild(configScript);
+    document.body.appendChild(libScript);
+
+    // MutationObserver — CPX popup DOM'a girince ortala
+    const observer = new MutationObserver(() => {
+      const popups = document.querySelectorAll(
+        'body > [class*="cpx"], body > [id*="cpx"], body > [class*="survey"], body > [class*="modal"], body > [class*="overlay"]'
+      );
+      popups.forEach(el => {
+        if (el.id === "cpx-fullscreen" || el.id === "cpx-widget-shell") return;
+        el.style.position = "fixed";
+        el.style.top = "50%";
+        el.style.left = "50%";
+        el.style.transform = "translate(-50%, -50%)";
+        el.style.margin = "0";
+        el.style.zIndex = "2147483647";
+      });
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    // Style overrides
+    const styleOverride = document.createElement("style");
+    styleOverride.id = "cpx-style-override";
+    styleOverride.innerHTML = `
+      /* Font */
+      #cpx-fullscreen * {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+      }
+
+      /* Topbar */
+      #cpx-fullscreen [class*="topbar"],
+      #cpx-fullscreen [class*="header"] {
+        background-color: #00ce98 !important;
+      }
+
+      /* Yıldızlar — SVG fill + color her ikisi de */
+      #cpx-fullscreen [class*="star"] svg,
+      #cpx-fullscreen [class*="star"] svg *,
+      #cpx-fullscreen [class*="rating"] svg,
+      #cpx-fullscreen [class*="rating"] svg * {
+        fill: #FFD700 !important;
+        color: #FFD700 !important;
+        stroke: none !important;
+      }
+      #cpx-fullscreen [class*="star"],
+      #cpx-fullscreen [class*="rating"] {
+        color: #FFD700 !important;
+      }
+
+      /* Ödül / miktar rengi */
+      #cpx-fullscreen [class*="reward"],
+      #cpx-fullscreen [class*="amount"],
+      #cpx-fullscreen [class*="price"],
+      #cpx-fullscreen [class*="earn"] {
+        color: #00ce98 !important;
+        font-weight: 700 !important;
+      }
+
+      /* Ok ve linkler — buton olan anchor'ları hariç tut */
+      #cpx-fullscreen [class*="arrow"] {
+        color: #00ce98 !important;
+      }
+
+      /* Anket bulunamadı metni */
+      #cpx-fullscreen [class*="no-survey"],
+      #cpx-fullscreen [class*="nosurvey"],
+      #cpx-fullscreen [class*="empty"],
+      #cpx-fullscreen [class*="not-found"],
+      #cpx-fullscreen [class*="no_survey"] {
+        color: #00ce98 !important;
+        font-size: 18px !important;
+        font-weight: 700 !important;
+      }
+
+      /* Başlık metinleri */
+      #cpx-fullscreen h1,
+      #cpx-fullscreen h2,
+      #cpx-fullscreen h3,
+      #cpx-fullscreen h4 {
+        color: #1a1a2e !important;
+      }
+
+      /* Welcome banner stacking context'ini sıfırla — popup arkada kalmasın */
+      .welcome-banner,
+      .banner-content,
+      .banner-scene {
+        z-index: unset !important;
+      }
+
+      /* Header ve sidebar popup'ın arkasında kalsın */
+      .header,
+      .chat-sidebar,
+      .chat-sidebar-wrapper {
+        z-index: 1 !important;
+      }
+    `;
+    document.head.appendChild(styleOverride);
+
+    return () => {
+      observer.disconnect();
+      document.getElementById("cpx-config-script")?.remove();
+      document.getElementById("cpx-lib-script")?.remove();
+      document.getElementById("cpx-style-override")?.remove();
+      document.getElementById("cpx-fullscreen-wrapper")?.remove();
+    };
+  }, [userId, username]);
+
+  return (
+    /*
+      position: relative + isolation: isolate → yeni stacking context oluşturur.
+      CPX'in fixed popup'u idealde buraya göre konumlanır;
+      tam çalışmazsa en azından z-index karışmaz.
+    */
+    <div
+      id="cpx-widget-shell"
+      ref={containerRef}
+      style={{
+        width: "100%",
+        minHeight: "72vh",
+        background: "#f4f6fb",
+        borderRadius: 14,
+        overflow: "hidden",
+        position: "relative",
+        isolation: "isolate",
+      }}
+    >
+      <div
+        id="cpx-fullscreen"
+        style={{ maxWidth: "950px", margin: "0 auto" }}
+      />
+    </div>
+  );
+}
+
 // ─── HomePage ─────────────────────────────────────────────────────────────────
 export function HomePage() {
   const {
@@ -497,7 +687,6 @@ export function HomePage() {
                       borderRadius: 14, display: "flex", flexDirection: "column",
                       alignItems: "center", padding: "36px 24px", gap: 28, textAlign: "center",
                     }}>
-                      {/* Uyarı kutusu */}
                       <div style={{
                         background: "rgba(76,187,110,0.08)", border: "1.5px solid rgba(76,187,110,0.30)",
                         borderRadius: 14, padding: "20px 28px", maxWidth: 500, width: "100%",
@@ -519,8 +708,6 @@ export function HomePage() {
                           <span style={{ color: "#fff", fontWeight: 800 }}>won't appear here.</span>
                         </div>
                       </div>
-
-                      {/* Open TimeWall butonu */}
                       <a
                         href={`https://timewall.io/users/login?oid=${TIMEWALL_OID}&uid=${userId}`}
                         target="_blank"
@@ -538,8 +725,6 @@ export function HomePage() {
                       >
                         Open TimeWall →
                       </a>
-
-                      {/* Redeem görseli */}
                       <img
                         src="/timewallpopup.webp"
                         alt="How to redeem on TimeWall"
@@ -552,26 +737,26 @@ export function HomePage() {
                     </div>
                   ) : (
                     <div style={{
-                      background: "#090913", border: "1px solid var(--border-gold)",
-                      borderRadius: 14, overflow: "hidden", height: "72vh", minHeight: 480,
+                      borderRadius: 14, overflow: "hidden", minHeight: 480,
                     }}>
+                      {/* ── CPX Research — Script Tag ── */}
                       {activeOffer === "cpx" && (
-                        <iframe
-                          style={{ width: "100%", height: "100%", border: 0 }}
-                          title="CPX Research"
-                          src={"https://offers.cpx-research.com/index.php?app_id=33253&ext_user_id=" + userId + "&secure_hash=" + md5(String(userId) + "-" + CPX_SECRET) + "&username=" + username + "&email=&subid_1=&subid_2="}
-                        />
+                        <CPXWidget userId={userId} username={username} />
                       )}
+
+                      {/* ── Bitlabs — iFrame ── */}
                       {activeOffer === "bitlabs" && (
                         <iframe
-                          style={{ width: "100%", height: "100%", border: 0 }}
+                          style={{ width: "100%", height: "72vh", minHeight: 480, border: 0 }}
                           title="Bitlabs"
                           src={"https://web.bitlabs.ai/?uid=" + userId + "&token=" + BITLABS_APP_TOKEN}
                         />
                       )}
+
+                      {/* ── TheoremReach — iFrame ── */}
                       {activeOffer === "tr" && trUrl && (
                         <iframe
-                          style={{ width: "100%", height: "100%", border: 0 }}
+                          style={{ width: "100%", height: "72vh", minHeight: 480, border: 0 }}
                           title="TheoremReach"
                           src={trUrl}
                         />
