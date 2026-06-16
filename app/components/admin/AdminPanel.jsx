@@ -413,7 +413,7 @@ export function AdminPanel({ claims, withdrawals, tickets, onRefresh, adminUsern
                     <div key={c._id} style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 16px", borderBottom: "1px solid var(--border)" }}>
                       <div style={{ flex: 1 }}><div style={{ fontFamily: "'Fredoka', sans-serif", fontWeight: 800, fontSize: 13, color: "var(--text)" }}>{c.itemName}</div><div style={{ fontSize: 11, color: "var(--text3)", fontWeight: 500 }}>@{c.username}</div></div>
                       {(c.chatMessages || []).some(m => m.from === "user") && <span className="waiting-dot" />}
-                      <button onClick={() => { setAdminClaimChatId(c._id); setAdminChatInput(""); }} style={{ fontFamily: "'Fredoka', sans-serif", fontSize: 12, fontWeight: 800, background: "rgba(255,255,255,0.04)", color: "var(--text)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 7, padding: "6px 14px", cursor: "pointer" }}>Chat</button>
+                      <button onClick={() => { setAdminClaimChatId(c._id); setAdminChatInput(""); }} style={{ fontFamily: "'Fredoka', sans-serif", fontSize: 12, fontWeight: 800, background: "var(--surface2)", color: "var(--text)", border: "1px solid var(--border)", borderRadius: 7, padding: "6px 14px", cursor: "pointer" }}>Chat</button>
                     </div>
                   ))}
                 </div>
@@ -480,7 +480,7 @@ export function AdminPanel({ claims, withdrawals, tickets, onRefresh, adminUsern
                     <div style={{ fontSize: 12, color: "var(--text3)", fontWeight: 500 }}>@{c.username} · {c.category}</div>
                   </div>
                   <div style={{ padding: "14px 18px", display: "flex", gap: 8, flexShrink: 0 }}>
-                    <button onClick={() => { setAdminClaimChatId(c._id); setAdminChatInput(""); }} style={{ fontFamily: "'Fredoka', sans-serif", fontSize: 13, fontWeight: 800, background: "rgba(255,255,255,0.04)", color: "var(--text)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 9, padding: "8px 18px", cursor: "pointer" }}>Chat</button>
+                    <button onClick={() => { setAdminClaimChatId(c._id); setAdminChatInput(""); }} style={{ fontFamily: "'Fredoka', sans-serif", fontSize: 13, fontWeight: 800, background: "var(--surface2)", color: "var(--text)", border: "1px solid var(--border)", borderRadius: 9, padding: "8px 18px", cursor: "pointer" }}>Chat</button>
                     {!isClaimed && <button onClick={() => markClaimComplete(c._id)} className="btn-green" style={{ padding: "8px 16px", fontSize: 13 }}>✓ Complete</button>}
                   </div>
                 </div>
@@ -507,7 +507,7 @@ export function AdminPanel({ claims, withdrawals, tickets, onRefresh, adminUsern
                     <div style={{ fontSize: 13, color: "var(--text2)", fontWeight: 500 }}>{ticket.desc}</div>
                   </div>
                   <div style={{ padding: "10px 20px", display: "flex", gap: 10, justifyContent: "flex-end" }}>
-                    <button onClick={() => { setAdminSupportChatId(ticket._id); setSupportReplyStatus(prev => ({ ...prev, [ticket._id]: "waiting_answer" })); setAdminSupportInput(""); }} style={{ fontFamily: "'Fredoka', sans-serif", fontSize: 13, fontWeight: 800, background: "rgba(255,255,255,0.04)", color: "var(--text)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 9, padding: "8px 16px", cursor: "pointer" }}>Chat</button>
+                    <button onClick={() => { setAdminSupportChatId(ticket._id); setSupportReplyStatus(prev => ({ ...prev, [ticket._id]: "waiting_answer" })); setAdminSupportInput(""); }} style={{ fontFamily: "'Fredoka', sans-serif", fontSize: 13, fontWeight: 800, background: "var(--surface2)", color: "var(--text)", border: "1px solid var(--border)", borderRadius: 9, padding: "8px 16px", cursor: "pointer" }}>Chat</button>
                   </div>
                 </div>
               );
@@ -626,7 +626,7 @@ export function AdminPanel({ claims, withdrawals, tickets, onRefresh, adminUsern
                 onSend={sendAdminClaimMessage}
                 placeholder="Reply as moderator..."
                 sendLabel="Reply"
-                sendButtonStyle={{ background: "#f3f4f6", color: "#0a0a0f" }}
+                sendButtonStyle={{ background: "var(--cheap)", color: "#fff" }}
               />
             )}
           </div>
@@ -680,7 +680,7 @@ export function AdminPanel({ claims, withdrawals, tickets, onRefresh, adminUsern
                   onSend={sendAdminSupportMessage}
                   placeholder="Reply to the ticket..."
                   sendLabel="Reply"
-                  sendButtonStyle={{ background: "#f3f4f6", color: "#0a0a0f" }}
+                  sendButtonStyle={{ background: "var(--cheap)", color: "#fff" }}
                 />
               </>
             )}

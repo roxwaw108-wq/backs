@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/admin", "/api", "/r/"],
       },
     ],
-    sitemap: "https://cheap.gg/sitemap.xml",
+    sitemap: "https://earnpets.com/sitemap.xml",
   };
 }

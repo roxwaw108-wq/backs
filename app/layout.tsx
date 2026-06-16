@@ -16,30 +16,30 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://cheap.gg"),
+  metadataBase: new URL("https://earnpets.com"),
   title: {
-    default: "Cheap.gg - Earn Free Robux and Roblox from Offers & Tasks",
-    template: "%s | Cheap.gg",
+    default: "EarnPets - Earn Free Robux, Roblox Rewards, and Offer Payouts",
+    template: "%s | EarnPets",
   },
   description:
-    "Earn free Robux on Cheap.gg by completing surveys, offers, and games. Fast rewards, instant cashouts, and support for Roblox items including Adopt Me and MM2.",
+    "Earn free Robux on EarnPets by completing surveys, offerwall tasks, and reward activities. Discover Roblox rewards, fast withdrawals, and simple ways to earn more every day.",
   alternates: {
-    canonical: "https://cheap.gg",
+    canonical: "https://earnpets.com",
   },
   openGraph: {
     type: "website",
-    url: "https://cheap.gg",
-    siteName: "Cheap.gg",
-    title: "Cheap.gg - Earn Free Robux and Roblox from Offers & Tasks",
+    url: "https://earnpets.com",
+    siteName: "EarnPets",
+    title: "EarnPets - Earn Free Robux, Roblox Rewards, and Offer Payouts",
     description:
-      "Earn free Robux on Cheap.gg by completing surveys, offers, and games. Fast rewards, instant cashouts, and support for Roblox items including Adopt Me and MM2.",
+      "Earn free Robux on EarnPets by completing surveys, offerwall tasks, and reward activities. Discover Roblox rewards, fast withdrawals, and simple ways to earn more every day.",
     images: [{ url: "/headerlogo.webp" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Cheap.gg - Earn Free Robux and Roblox from Offers & Tasks",
+    title: "EarnPets - Earn Free Robux, Roblox Rewards, and Offer Payouts",
     description:
-      "Earn free Robux on Cheap.gg by completing surveys, offers, and games. Fast rewards, instant cashouts, and support for Roblox items including Adopt Me and MM2.",
+      "Earn free Robux on EarnPets by completing surveys, offerwall tasks, and reward activities. Discover Roblox rewards, fast withdrawals, and simple ways to earn more every day.",
     images: ["/headerlogo.webp"],
   },
 };

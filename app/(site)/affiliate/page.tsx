@@ -3,12 +3,12 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Affiliate Program",
-  description: "Earn extra Robux by referring friends to Cheap.gg.",
-  alternates: { canonical: "https://cheap.gg/affiliate" },
+  description: "Join the EarnPets affiliate program and earn extra Robux by referring friends to complete offers and rewards.",
+  alternates: { canonical: "https://earnpets.com/affiliate" },
   openGraph: {
-    url: "https://cheap.gg/affiliate",
-    title: "Affiliate Program | Cheap.gg",
-    description: "Earn extra Robux by referring friends to Cheap.gg.",
+    url: "https://earnpets.com/affiliate",
+    title: "Affiliate Program | EarnPets",
+    description: "Join the EarnPets affiliate program and earn extra Robux by referring friends to complete offers and rewards.",
   },
 };
 

@@ -3,12 +3,12 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "My Claims",
-  description: "View and track your reward claims on Cheap.gg.",
-  alternates: { canonical: "https://cheap.gg/claims" },
+  description: "Track your EarnPets reward claims, Roblox payouts, and completed redemptions in one place.",
+  alternates: { canonical: "https://earnpets.com/claims" },
   openGraph: {
-    url: "https://cheap.gg/claims",
-    title: "My Claims | Cheap.gg",
-    description: "View and track your reward claims on Cheap.gg.",
+    url: "https://earnpets.com/claims",
+    title: "My Claims | EarnPets",
+    description: "Track your EarnPets reward claims, Roblox payouts, and completed redemptions in one place.",
   },
 };
 

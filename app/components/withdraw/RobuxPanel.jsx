@@ -93,7 +93,7 @@ export function RobuxPanel({ tokens, setTokens, userId, username, displayName, a
             <label className="label-sm" style={{ margin: 0 }}>Amount (Tokens)</label>
             <button
               onClick={() => setLocalAmount(String(tokens))}
-              style={{ background: "none", border: "none", color: "#f5a623", fontFamily: "'Fredoka', sans-serif", fontWeight: 800, fontSize: 12, cursor: "pointer", padding: 0 }}
+              style={{ background: "none", border: "none", color: "var(--cheap)", fontFamily: "'Fredoka', sans-serif", fontWeight: 800, fontSize: 12, cursor: "pointer", padding: 0 }}
             >
               Max
             </button>
@@ -127,7 +127,7 @@ export function RobuxPanel({ tokens, setTokens, userId, username, displayName, a
                 }}
               >
                 <span style={{ fontFamily: "'Fredoka', sans-serif", fontWeight: 800, fontSize: 14, color: "var(--text)" }}>
-                  Set gamepass price to: <span style={{ color: "#f5a623" }}>{gamepassPrice.toLocaleString()} Robux</span>
+                  Set gamepass price to: <span style={{ color: "var(--cheap)" }}>{gamepassPrice.toLocaleString()} Robux</span>
                 </span>
                 <span style={{ color: "var(--text3)", fontSize: 18, transition: "transform .2s", transform: instructionsOpen ? "rotate(180deg)" : "rotate(0deg)" }}>▾</span>
               </div>
@@ -137,7 +137,7 @@ export function RobuxPanel({ tokens, setTokens, userId, username, displayName, a
                 <div style={{
                   padding: "16px 18px",
                   background: "var(--surface2)",
-                  border: "1px solid rgba(245,166,35,0.18)",
+                  border: "1px solid rgba(229,106,162,0.18)",
                   borderTop: "none",
                   borderRadius: "0 0 10px 10px",
                   fontSize: 13,
@@ -146,7 +146,7 @@ export function RobuxPanel({ tokens, setTokens, userId, username, displayName, a
                 }}>
                   <div style={{ fontWeight: 700, marginBottom: 8, color: "var(--text)" }}>How to set up your gamepass:</div>
                   <ol style={{ margin: 0, paddingLeft: 18 }}>
-                    <li>Go to <a href="https://create.roblox.com" target="_blank" rel="noreferrer" style={{ color: "#f5a623" }}>Roblox Creator Dashboard ↗</a> and select your Place</li>
+                    <li>Go to <a href="https://create.roblox.com" target="_blank" rel="noreferrer" style={{ color: "var(--cheap)" }}>Roblox Creator Dashboard ↗</a> and select your Place</li>
                     <li>Scroll down to "Passes" under Monetization</li>
                     <li>Press the (⋮) on your gamepass &amp; click "Open in New Tab"</li>
                     <li>Go to the "Sales" tab</li>
@@ -188,7 +188,7 @@ export function RobuxPanel({ tokens, setTokens, userId, username, displayName, a
             </p>
           )}
 
-          <div style={{ marginTop: 18, padding: "10px 14px", background: "rgba(245,166,35,0.06)", border: "1px solid rgba(245,166,35,0.18)", borderRadius: 8, fontSize: 12, color: "var(--text3)", fontWeight: 500 }}>
+          <div style={{ marginTop: 18, padding: "10px 14px", background: "rgba(229,106,162,0.06)", border: "1px solid rgba(229,106,162,0.18)", borderRadius: 8, fontSize: 12, color: "var(--text3)", fontWeight: 500 }}>
             <span style={{ color: "var(--cheap)", fontFamily: "'Fredoka', sans-serif", fontWeight: 800 }}>1 token = R$1</span> · Processed in 24–48h
           </div>
         </div>
@@ -223,7 +223,7 @@ export function RobuxPanel({ tokens, setTokens, userId, username, displayName, a
                             <span style={{ fontFamily: "'Fredoka', sans-serif", fontSize: 11, fontWeight: 800, background: "rgba(220,38,38,0.12)", color: "#DC2626", border: "1px solid rgba(220,38,38,0.3)", borderRadius: 6, padding: "2px 8px", display: "inline-block" }}>✕ Gamepass Error</span>
                             <span style={{ fontSize: 10, color: "var(--text3)", fontWeight: 500, maxWidth: 180, lineHeight: 1.4 }}>
                               Your gamepass could not be verified. Please open a{" "}
-                              <a href="/support" style={{ color: "#f5a623", textDecoration: "underline", fontWeight: 700 }}>support ticket</a>
+                              <a href="/support" style={{ color: "var(--cheap)", textDecoration: "underline", fontWeight: 700 }}>support ticket</a>
                               {" "}for assistance.
                             </span>
                           </div>

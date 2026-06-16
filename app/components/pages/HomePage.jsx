@@ -28,27 +28,30 @@ function ToastNotification({ toasts, onRemove }) {
         {toasts.map(toast => (
           <div key={toast.id} onClick={() => onRemove(toast.id)} style={{
             display: "flex", alignItems: "center", gap: 12,
-            background: toast.type === "already" ? "#bf5f10" : "#127a3a",
+            background: toast.type === "already"
+              ? "linear-gradient(135deg, #fde9f0 0%, #f8ccd9 100%)"
+              : "linear-gradient(135deg, #ecfaf2 0%, #cfeede 100%)",
+            border: "1px solid " + (toast.type === "already" ? "rgba(229,106,162,0.18)" : "rgba(47,163,111,0.18)"),
             borderRadius: 12, padding: "13px 20px", minWidth: 280, maxWidth: 420,
-            boxShadow: "0 8px 32px rgba(0,0,0,0.7)", pointerEvents: "all",
+            boxShadow: "0 16px 36px rgba(76,88,110,0.16)", pointerEvents: "all",
             animation: "toastIn 0.25s cubic-bezier(.34,1.4,.64,1) both", cursor: "default",
           }}>
             <div style={{
               width: 28, height: 28, borderRadius: "50%",
-              border: "2px solid rgba(255,255,255,0.5)",
+              border: "2px solid rgba(36,48,66,0.18)",
               display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
             }}>
               {toast.type === "already" ? (
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#243042" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
                 </svg>
               ) : (
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#243042" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                   <polyline points="20 6 9 17 4 12"/>
                 </svg>
               )}
             </div>
-            <span style={{ fontFamily: "'Fredoka', sans-serif", fontSize: 15, fontWeight: 800, color: "#fff", lineHeight: 1.3 }}>
+            <span style={{ fontFamily: "'Fredoka', sans-serif", fontSize: 15, fontWeight: 800, color: "var(--text)", lineHeight: 1.3 }}>
               {toast.text}
             </span>
           </div>
@@ -64,7 +67,7 @@ function AvatarFrame({ src, size = 64, onError }) {
     <div style={{ flexShrink: 0 }}>
       <div style={{
         width: size, height: size, borderRadius: 13,
-        border: "3px solid rgba(255,255,255,0.10)", overflow: "hidden", boxSizing: "border-box",
+        border: "3px solid rgba(229,106,162,0.18)", overflow: "hidden", boxSizing: "border-box",
       }}>
         <img src={src} alt="avatar" onError={onError}
           style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
@@ -95,7 +98,7 @@ function LiveEarningsStrip() {
       }}>
         <span style={{
           width: 7, height: 7, borderRadius: "50%",
-          background: "#2ecc71", boxShadow: "0 0 6px rgba(46,204,113,0.6)",
+          background: "var(--green)", boxShadow: "0 0 6px rgba(47,163,111,0.36)",
           display: "inline-block", animation: "pulse 2s infinite",
         }} />
         Live Earns
@@ -110,20 +113,20 @@ function LiveEarningsStrip() {
           }}>
             <img
               src={item.avatarUrl || "https://www.gravatar.com/avatar/?d=mp"}
-              style={{ width: 40, height: 40, borderRadius: 6, objectFit: "cover", flexShrink: 0, border: "2px solid #f5a623" }}
+              style={{ width: 40, height: 40, borderRadius: 6, objectFit: "cover", flexShrink: 0, border: "2px solid var(--cheap)" }}
               onError={e => { e.target.src = "https://www.gravatar.com/avatar/?d=mp"; }}
             />
             <div style={{ minWidth: 0, flex: 1, overflow: "hidden" }}>
               <div style={{ fontWeight: 800, color: "var(--text)", fontFamily: "'Fredoka', sans-serif", fontSize: 13, lineHeight: 1.3, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                 {item.displayName || item.username}
               </div>
-              <div style={{ fontSize: 11, color: "#f5a623", fontWeight: 700, lineHeight: 1.3, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+              <div style={{ fontSize: 11, color: "var(--cheap)", fontWeight: 700, lineHeight: 1.3, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                 {shortSource(item.source)}
               </div>
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: 3, flexShrink: 0 }}>
-              <span style={{ color: "#2ecc71", fontWeight: 900, fontFamily: "'Fredoka', sans-serif", fontSize: 16 }}>R$</span>
-              <span style={{ color: "#fff", fontWeight: 800, fontFamily: "'Fredoka', sans-serif", fontSize: 16 }}>{item.tokens}</span>
+              <span style={{ color: "var(--green)", fontWeight: 900, fontFamily: "'Fredoka', sans-serif", fontSize: 16 }}>R$</span>
+              <span style={{ color: "var(--text)", fontWeight: 800, fontFamily: "'Fredoka', sans-serif", fontSize: 16 }}>{item.tokens}</span>
             </div>
           </div>
         ))}
@@ -165,7 +168,7 @@ function SectionHeader({ icon, title, subtitle }) {
           <div style={{ fontFamily: "'Fredoka', sans-serif", fontSize: 20, fontWeight: 700, color: "var(--text)", marginBottom: 1, lineHeight: 1.2 }}>
             {title}
           </div>
-          <div style={{ fontFamily: "'Fredoka', sans-serif", fontSize: 13, fontWeight: 500, color: "#ffffff", opacity: 0.55 }}>
+          <div style={{ fontFamily: "'Fredoka', sans-serif", fontSize: 13, fontWeight: 500, color: "var(--text2)" }}>
             {subtitle}
           </div>
         </div>
@@ -217,10 +220,10 @@ function SocialsTaskRow({ loggedIn, userId, onClaim, openLoginModal }) {
   }, [loggedIn, userId]);
 
   const socials = [
-    { key: "youtube",   label: "YouTube",   reward: "+2 Tokens", rewardNum: 2, icon: "/youtube.svg",   href: "https://youtube.com/@cheapdotgg",   bg: "#212121", border: "#212121" },
-    { key: "discord",   label: "Discord",   reward: "+1 Token",  rewardNum: 1, icon: "/discord.svg",   href: "https://discord.gg/MbUeMBPmzQ",     bg: "#7289DA", border: "rgba(114,137,218,0.5)" },
-    { key: "instagram", label: "Instagram", reward: "+1 Token",  rewardNum: 1, icon: "/instagram.svg", href: "https://instagram.com/cheapdotgg",  bg: "#ffffff", border: "#e0e0e0" },
-    { key: "tiktok",    label: "TikTok",    reward: "+1 Token",  rewardNum: 1, icon: "/tiktok.svg",    href: "https://tiktok.com/@cheap_gg",    bg: "#000000ff", border: "#000000ff" },
+    { key: "youtube",   label: "YouTube",   reward: "+2 Tokens", rewardNum: 2, icon: "/youtube.svg",   href: "https://youtube.com/@cheapdotgg",   bg: "linear-gradient(180deg, #ffe8f0 0%, #ffd9e8 100%)", border: "#efbfd2" },
+    { key: "discord",   label: "Discord",   reward: "+1 Token",  rewardNum: 1, icon: "/discord.svg",   href: "https://discord.gg/MbUeMBPmzQ",     bg: "linear-gradient(180deg, #ebefff 0%, #dde5ff 100%)", border: "rgba(114,137,218,0.30)" },
+    { key: "instagram", label: "Instagram", reward: "+1 Token",  rewardNum: 1, icon: "/instagram.svg", href: "https://instagram.com/cheapdotgg",  bg: "linear-gradient(180deg, #fff0f6 0%, #ffe3ef 100%)", border: "#efcfdd" },
+    { key: "tiktok",    label: "TikTok",    reward: "+1 Token",  rewardNum: 1, icon: "/tiktok.svg",    href: "https://tiktok.com/@cheap_gg",    bg: "linear-gradient(180deg, #eef3f8 0%, #e0e8f1 100%)", border: "#ccd7e4" },
   ];
 
   return (
@@ -256,6 +259,7 @@ function SocialsTaskRow({ loggedIn, userId, onClaim, openLoginModal }) {
               alignItems: "center", justifyContent: "center",
               position: "relative", textDecoration: "none",
               borderRadius: 16, overflow: "hidden", transition: "transform 0.18s ease, filter 0.18s ease",
+              boxShadow: "0 10px 24px rgba(76,88,110,0.08)",
             }}
             onMouseEnter={e => {
               if (!loggedIn) return;
@@ -638,7 +642,7 @@ export function HomePage() {
                     border: "1.5px solid rgba(245,166,35,0.5)",
                   }} className="banner-stat">
                     <TokenCoin size={24} />
-                    <span style={{ fontFamily: "'Fredoka', sans-serif", fontSize: 14, fontWeight: 800, color: "#ffffff", whiteSpace: "nowrap" }}>
+                    <span style={{ fontFamily: "'Fredoka', sans-serif", fontSize: 14, fontWeight: 800, color: "var(--text)", whiteSpace: "nowrap" }}>
                       {typeof tokens === "number" ? tokens.toLocaleString() : tokens} Tokens
                     </span>
                   </div>
@@ -647,10 +651,10 @@ export function HomePage() {
                     background: "transparent", borderRadius: 10, padding: "9px 16px",
                     border: "1.5px solid rgba(245,166,35,0.5)",
                   }} className="banner-stat">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2ecc71" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                       <polyline points="20 6 9 17 4 12"/>
                     </svg>
-                    <span style={{ fontFamily: "'Fredoka', sans-serif", fontSize: 14, fontWeight: 800, color: "#ffffff", whiteSpace: "nowrap" }}>
+                    <span style={{ fontFamily: "'Fredoka', sans-serif", fontSize: 14, fontWeight: 800, color: "var(--text)", whiteSpace: "nowrap" }}>
                       {tasksCompleted} Tasks done
                     </span>
                   </div>
@@ -708,7 +712,7 @@ export function HomePage() {
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14 }}>
                     <button type="button" onClick={() => setActiveOffer(null)} style={{
                       display: "flex", alignItems: "center", gap: 7,
-                      background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.14)",
+                      background: "var(--surface2)", border: "1px solid var(--border)",
                       color: "var(--text)", borderRadius: 9, padding: "8px 16px", cursor: "pointer",
                       fontFamily: "'Fredoka', sans-serif", fontSize: 13, fontWeight: 800,
                     }}>
@@ -738,13 +742,13 @@ export function HomePage() {
                         </div>
                         <div style={{
                           fontFamily: "'Fredoka', sans-serif", fontSize: 14, fontWeight: 600,
-                          color: "rgba(255,255,255,0.72)", lineHeight: 1.7,
+                          color: "var(--text2)", lineHeight: 1.7,
                         }}>
                           After completing an offer on TimeWall, go to{" "}
                           <span style={{ color: "#4cbb6e", fontWeight: 900 }}>Account → Redeem</span>
                           {" "}to send your tokens to your cheap.gg balance.
                           Without redeeming, your tokens will stay on TimeWall and{" "}
-                          <span style={{ color: "#fff", fontWeight: 800 }}>won't appear here.</span>
+                          <span style={{ color: "var(--text)", fontWeight: 800 }}>won't appear here.</span>
                         </div>
                       </div>
                       <a
@@ -756,7 +760,7 @@ export function HomePage() {
                           padding: "14px 48px", borderRadius: 12,
                           background: "#4cbb6e", color: "#fff",
                           textDecoration: "none", display: "inline-block",
-                          boxShadow: "0 4px 24px rgba(76,187,110,0.40)",
+                          boxShadow: "0 10px 26px rgba(76,187,110,0.28)",
                           transition: "filter 0.15s ease",
                         }}
                         onMouseEnter={e => e.currentTarget.style.filter = "brightness(1.1)"}
@@ -814,7 +818,7 @@ export function HomePage() {
                     transition: "transform 0.18s ease, box-shadow 0.22s ease, filter 0.18s ease",
                     boxSizing: "border-box",
                     transform: hoveredCard === card.key ? "translateY(-4px) scale(1.02)" : "none",
-                    boxShadow: hoveredCard === card.key ? "0 8px 20px rgba(0,0,0,0.35)" : "0 2px 8px rgba(0,0,0,0.2)",
+                    boxShadow: hoveredCard === card.key ? "0 18px 34px rgba(76,88,110,0.16)" : "0 8px 18px rgba(76,88,110,0.10)",
                     filter: hoveredCard === card.key ? "brightness(1.08)" : "brightness(1)",
                   }}
                 >

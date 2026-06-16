@@ -15,7 +15,7 @@ export function ChatSidebar() {
         <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
           <span style={{
             width: 7, height: 7, borderRadius: "50%",
-            background: "#2ecc71", boxShadow: "0 0 6px rgba(46,204,113,0.6)",
+            background: "var(--green)", boxShadow: "0 0 6px rgba(47,163,111,0.36)",
             display: "inline-block", animation: "pulse 2s infinite",
           }} />
           <span className="chat-title">Live Chat</span>
@@ -54,9 +54,9 @@ export function ChatSidebar() {
 
           const isMe  = msg.user === displayName;
           const nameColor = msg.isAdmin ? "var(--red)" : "var(--text)";
-          const avatarBorder = msg.isAdmin ? "2px solid rgba(255,90,90,0.40)" : "2px solid rgba(255,255,255,0.10)";
-          const cardBg     = isMe ? "rgba(245,166,35,0.07)"    : "rgba(255,255,255,0.035)";
-          const cardBorder = isMe ? "1px solid rgba(245,166,35,0.18)" : "1px solid rgba(255,255,255,0.06)";
+          const avatarBorder = msg.isAdmin ? "2px solid rgba(220,95,120,0.28)" : "2px solid rgba(229,106,162,0.14)";
+          const cardBg     = isMe ? "rgba(229,106,162,0.10)" : "rgba(255,255,255,0.74)";
+          const cardBorder = isMe ? "1px solid rgba(229,106,162,0.22)" : "1px solid var(--border)";
 
           return (
             <div

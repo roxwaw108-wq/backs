@@ -3,12 +3,12 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "FAQ",
-  description: "Frequently asked questions about Cheap.gg.",
-  alternates: { canonical: "https://cheap.gg/faq" },
+  description: "Read frequently asked questions about EarnPets, free Robux offers, withdrawals, claims, and account support.",
+  alternates: { canonical: "https://earnpets.com/faq" },
   openGraph: {
-    url: "https://cheap.gg/faq",
-    title: "FAQ | Cheap.gg",
-    description: "Frequently asked questions about Cheap.gg.",
+    url: "https://earnpets.com/faq",
+    title: "FAQ | EarnPets",
+    description: "Read frequently asked questions about EarnPets, free Robux offers, withdrawals, claims, and account support.",
   },
 };
 

@@ -127,8 +127,8 @@ export function StockPanel({ cat, tokens, avatarUrl, displayName, username, setB
                   }}
                   onMouseEnter={e => {
                     e.currentTarget.style.transform = "translateY(-3px)";
-                    e.currentTarget.style.borderColor = "#f5a623";
-                    e.currentTarget.style.boxShadow = "0 8px 24px rgba(245,166,35,0.12)";
+                    e.currentTarget.style.borderColor = "var(--cheap)";
+                    e.currentTarget.style.boxShadow = "0 12px 26px rgba(229,106,162,0.12)";
                   }}
                   onMouseLeave={e => {
                     e.currentTarget.style.transform = "translateY(0)";
@@ -190,8 +190,8 @@ export function StockPanel({ cat, tokens, avatarUrl, displayName, username, setB
                       fontFamily: "'Fredoka', sans-serif",
                       fontSize: 14,
                       fontWeight: 800,
-                      background: "#f5a623",
-                      color: "#1a1000",
+                      background: "var(--cheap)",
+                      color: "#fff",
                       border: "none",
                       borderRadius: 10,
                       padding: "10px 0",
@@ -200,11 +200,11 @@ export function StockPanel({ cat, tokens, avatarUrl, displayName, username, setB
                       marginTop: 2,
                     }}
                     onMouseEnter={e => {
-                      e.currentTarget.style.background = "#ffbe4d";
+                      e.currentTarget.style.background = "var(--cheap-bright)";
                       e.currentTarget.style.transform = "scale(1.02)";
                     }}
                     onMouseLeave={e => {
-                      e.currentTarget.style.background = "#f5a623";
+                      e.currentTarget.style.background = "var(--cheap)";
                       e.currentTarget.style.transform = "scale(1)";
                     }}
                   >

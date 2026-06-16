@@ -10,7 +10,7 @@ function AvatarFrame({ src, size = 88, onError }) {
         width: size,
         height: size,
         borderRadius: 13,
-        border: `3px solid rgba(255,255,255,0.10)`,
+        border: `3px solid rgba(229,106,162,0.18)`,
         overflow: "hidden",
         boxSizing: "border-box",
       }}>
